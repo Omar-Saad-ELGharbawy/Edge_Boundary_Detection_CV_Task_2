@@ -1,22 +1,25 @@
 QT       += core gui
 QT       += core gui charts
+
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
 
 CONFIG += c++17
 
-INCLUDEPATH += C:\apps\opencv\release\install\include
+INCLUDEPATH += C:\openCV\opencv\release\install\include
 
-LIBS += C:\apps\opencv\release\bin\libopencv_core470.dll
-LIBS += C:\apps\opencv\release\bin\libopencv_highgui470.dll
-LIBS += C:\apps\opencv\release\bin\libopencv_imgcodecs470.dll
-LIBS += C:\apps\opencv\release\bin\libopencv_imgproc470.dll
-LIBS += C:\apps\opencv\release\bin\libopencv_calib3d470.dll
-LIBS += C:\apps\opencv\release\bin\libopencv_calib3d470.dll
+LIBS += C:\openCV\opencv\release\bin\libopencv_core470.dll
+LIBS += C:\openCV\opencv\release\bin\libopencv_highgui470.dll
+LIBS += C:\openCV\opencv\release\bin\libopencv_imgcodecs470.dll
+LIBS += C:\openCV\opencv\release\bin\libopencv_imgproc470.dll
+LIBS += C:\openCV\opencv\release\bin\libopencv_calib3d470.dll
+LIBS += C:\openCV\opencv\release\bin\libopencv_calib3d470.dll
+
 # You can make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    ActiveContour/activecontour.cpp \
     Filters/add_noise.cpp \
     Filters/convolution.cpp \
     Filters/edge_detection.cpp \
@@ -26,16 +29,20 @@ SOURCES += \
     Histogram/Histogram.cpp \
     Threshold/Thresholding.cpp \
     UI/cannyparameters.cpp \
+    UI/clickablelabel.cpp \
     UI/gaussiannoiseparameters.cpp \
     UI/qcustomplot.cpp \
     UI/saltpepperparameters.cpp \
     UI/thresholdwindow.cpp \
     UI/uniformnoiseparameters.cpp \
     imageClass.cpp \
-    mainwindow.cpp \
     main.cpp \
+    mainwindow.cpp \
+
+
 
 HEADERS += \
+    ActiveContour/activecontour.h \
     Filters/add_noise.hpp \
     Filters/convolution.hpp \
     Filters/edge_detection.hpp \
@@ -43,16 +50,18 @@ HEADERS += \
     Filters/remove_noise.hpp \
     Frequency/frequency.hpp \
     Histogram/Histogram.hpp \
-    Common.hpp \
     Threshold/Thresholding.hpp \
     UI/cannyparameters.h \
+    UI/clickablelabel.h \
     UI/gaussiannoiseparameters.h \
     UI/qcustomplot.h \
     UI/saltpepperparameters.h \
     UI/thresholdwindow.h \
     UI/uniformnoiseparameters.h \
     imageClass.hpp \
-    mainwindow.h
+    mainwindow.h \
+    Common.hpp \
+
 
 FORMS += \
     Forms/cannyparameters.ui \
@@ -90,24 +99,12 @@ DISTFILES += \
     Images/girl.jpg \
     Images/lenna.png \
     Images/sudoku.png \
-    Images/tiger.jpg \
-    QT_GUI_TASK_1.pro.user
+    Images/tiger.jpg
 
 RESOURCES += \
     Fonts.qrc \
     Fonts.qrc \
     Fonts.qrc \
-    Fonts.qrc \
-    Fonts.qrc \
-    Fonts.qrc \
-    Fonts.qrc \
-    Fonts.qrc \
-    Icons.qrc \
-    Icons.qrc \
-    Icons.qrc \
-    Icons.qrc \
-    Icons.qrc \
     Icons.qrc \
     Icons.qrc \
     Icons.qrc
-
