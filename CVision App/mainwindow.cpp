@@ -12,6 +12,7 @@
 #include "Histogram/Histogram.hpp"
 #include "ActiveContour/activecontour.h"
 
+
 #include <iostream>
 #include <QFileDialog>
 #include <QImageReader>
