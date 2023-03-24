@@ -136,7 +136,7 @@ void display_area_perimeter(vector<Point> curve, Mat &outputImg){
 }
 
 
-void active_Contour_Model(Mat img, Mat &outputImg, Point center, int radius, int numIterations, double alpha, double beta, double gamma){
+vector<Point> active_Contour_Model(Mat img, Mat &outputImg, Point center, int radius, int numIterations, double alpha, double beta, double gamma){
 
     vector<Point> curve = initial_contour(center, radius);
     snake(img, curve, numIterations, alpha, beta, gamma);
@@ -153,4 +153,207 @@ void active_Contour_Model(Mat img, Mat &outputImg, Point center, int radius, int
 
     display_area_perimeter(curve,outputImg);
 
+    return curve;
 }
+
+
+// This defines a simple 2D point structure with x and y integer coordinates.
+struct Point
+{
+    int x;
+    int y;
+
+    bool operator!=(const Point &other) const
+    {
+        return x != other.x || y != other.y;
+    }
+};
+
+// This defines an enum of the possible directions (or chain codes) that can be used to traverse a contour.
+enum ChainCode
+{
+    East = 0,
+    NorthEast = 1,
+    North = 2,
+    NorthWest = 3,
+    West = 4,
+    SouthWest = 5,
+    South = 6,
+    SouthEast = 7
+};
+
+/*
+  1- This is a helper function that takes a point p and a direction direction
+  2- Returns the neighbor of point p in the given direction (E , NE, N , NW , W , SW, S ).
+*/
+
+Point getNeighbor(const Point &p, ChainCode direction)
+{
+    switch (direction)
+    {
+    case East:
+        return {p.x + 1, p.y};
+    case NorthEast:
+        return {p.x + 1, p.y - 1};
+    case North:
+        return {p.x, p.y - 1};
+    case NorthWest:
+        return {p.x - 1, p.y - 1};
+    case West:
+        return {p.x - 1, p.y};
+    case SouthWest:
+        return {p.x - 1, p.y + 1};
+    case South:
+        return {p.x, p.y + 1};
+    case SouthEast:
+        return {p.x + 1, p.y + 1};
+    }
+}
+
+/*
+1- This is function takes an image and a point.
+2-  Returns the value of the pixel at that point in the image.
+*/
+int pixelValue(const std::vector<std::vector<int>> &image, const Point &p)
+{
+    return image[p.y][p.x];
+}
+
+/*
+ 1- This  function  takes a current direction.
+ 2- Returns the next direction in the clockwise order.
+*/
+ChainCode findNextDirection(ChainCode currentDirection)
+{
+    return static_cast<ChainCode>((currentDirection + 1) % 8);
+}
+
+/*
+ 1- This function takes an image and a starting point.
+ 2- Returns the chain code of the contour starting from that point.
+ 3- It uses the getNeighbor, pixelValue, and findNextDirection helper functions to traverse the contour in a clockwise direction.
+ 4- Adds each direction to a vector of chain codes.
+*/
+std::vector<ChainCode> chainCode(const std::vector<std::vector<int>> &image, const Point &startPoint)
+{
+    std::vector<ChainCode> contour;
+    Point currentPoint = startPoint;
+    ChainCode currentDirection = East;
+    Point nextPoint;
+    int maxIterations = image.size() * image[0].size(); // maximum number of iterations to avoid infinite loop
+
+    do
+    {
+        // Find the next boundary point by checking the neighboring points in the clockwise order
+        ChainCode direction = currentDirection;
+        do
+        {
+            nextPoint = getNeighbor(currentPoint, direction);
+            direction = findNextDirection(direction);
+        } while (pixelValue(image, nextPoint) == 0 && direction != currentDirection);
+
+        // Add the direction to the contour
+        contour.push_back(direction);
+
+        // Update the current point and direction
+        currentPoint = nextPoint;
+       currentDirection = findNextDirection(static_cast<ChainCode>(direction + 4)); // opposite direction of the current direction
+    } while (currentPoint != startPoint && contour.size() < maxIterations);
+
+    return contour;
+}
+
+/*
+1- This function  takes an image.
+2- Returns a suitable starting point for the chain code algorithm.
+3- It simply returns the first non-zero pixel found.
+*/
+Point findStartingPoint(const std::vector<std::vector<int>> &image)
+{
+    // Simply return the first non-zero pixel found
+    for (int y = 0; y < image.size(); ++y)
+    {
+        for (int x = 0; x < image[y].size(); ++x)
+        {
+            if (image[y][x] != 0)
+            {
+                return {x, y};
+            }
+        }
+    }
+    // Return the origin if no non-zero pixel is found
+    return {0, 0};
+}
+
+/*
+1- This function  takes a chain code.
+2- Rotates it to a canonical representation.
+3- It finds the minimum chain code value in the contour.
+4- Rotates the contour so that the minimum value is at the beginning.
+*/
+std::vector<ChainCode> normalizeContour(const std::vector<ChainCode> &contour)
+{
+    std::vector<ChainCode> normalized = contour;
+    int minIndex = 0;
+    for (int i = 1; i < contour.size(); ++i)
+    {
+        if (contour[i] < normalized[minIndex])
+        {
+            minIndex = i;
+        }
+    }
+    std::rotate(normalized.begin(), normalized.begin() + minIndex, normalized.end());
+    return normalized;
+}
+
+/*
+
+1- This function takes a list of boundary points.
+2- creates a binary image from them.
+3- It creates a 2D vector of zeros with the specified width and height.
+4- sets the pixel values at the boundary points to 1.
+
+*/
+std::vector<std::vector<int>> createImageFromBoundary(const std::vector<Point> &boundary, int width, int height)
+{
+    std::vector<std::vector<int>> image(height, std::vector<int>(width, 0));
+    for (const Point &p : boundary)
+    {
+        if (p.x >= 0 && p.x < width && p.y >= 0 && p.y < height)
+        {
+            image[p.y][p.x] = 1;
+        }
+    }
+    return image;
+}
+
+// ------------------------------------- Main function ------------------------------
+//int main()
+//{
+//    // Input boundary points
+//    std::vector<Point> boundary = active_Contour_Model();
+
+//    // Create a binary image from the boundary points
+//    int width = 360;
+//    int height = 360;
+//    std::vector<std::vector<int>> image = createImageFromBoundary(boundary, width, height);
+
+//    // Find the starting point
+//    Point startPoint = findStartingPoint(image);
+
+//    // Calculate the chain code
+//    std::vector<ChainCode> contour = chainCode(image, startPoint);
+
+//    // Normalize and print the chain code
+//    std::vector<ChainCode> normalizedContour = normalizeContour(contour);
+//    for (ChainCode cc : normalizedContour)
+//    {
+//        std::cout << cc << " ";
+//    }
+//    std::cout << std::endl;
+
+//    return 0;
+//}
+
+
+
