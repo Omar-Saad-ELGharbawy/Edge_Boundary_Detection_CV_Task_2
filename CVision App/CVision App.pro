@@ -4,14 +4,14 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
 
 CONFIG += c++17
 
-INCLUDEPATH += C:\apps\opencv\release\install\include
+INCLUDEPATH += C:\openCV\opencv\release\install\include
 
-LIBS += C:\apps\opencv\release\bin\libopencv_core470.dll
-LIBS += C:\apps\opencv\release\bin\libopencv_highgui470.dll
-LIBS += C:\apps\opencv\release\bin\libopencv_imgcodecs470.dll
-LIBS += C:\apps\opencv\release\bin\libopencv_imgproc470.dll
-LIBS += C:\apps\opencv\release\bin\libopencv_calib3d470.dll
-LIBS += C:\apps\opencv\release\bin\libopencv_calib3d470.dll
+LIBS += C:\openCV\opencv\release\bin\libopencv_core470.dll
+LIBS += C:\openCV\opencv\release\bin\libopencv_highgui470.dll
+LIBS += C:\openCV\opencv\release\bin\libopencv_imgcodecs470.dll
+LIBS += C:\openCV\opencv\release\bin\libopencv_imgproc470.dll
+LIBS += C:\openCV\opencv\release\bin\libopencv_calib3d470.dll
+LIBS += C:\openCV\opencv\release\bin\libopencv_calib3d470.dll
 # You can make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
@@ -23,6 +23,7 @@ SOURCES += \
     Filters/edge_detection.cpp \
     Filters/helper_functions.cpp \
     Filters/remove_noise.cpp \
+    Forms/houghcircleparameters.cpp \
     Frequency/frequency.cpp \
     Histogram/Histogram.cpp \
     HoughTransfrom/hough_transform.cpp \
@@ -46,6 +47,7 @@ HEADERS += \
     Filters/edge_detection.hpp \
     Filters/helper_functions.hpp \
     Filters/remove_noise.hpp \
+    Forms/houghcircleparameters.h \
     Frequency/frequency.hpp \
     Histogram/Histogram.hpp \
     HoughTransfrom/hough_transform.hpp \
@@ -63,6 +65,7 @@ HEADERS += \
 FORMS += \
     Forms/cannyparameters.ui \
     Forms/gaussiannoiseparameters.ui \
+    Forms/houghcircleparameters.ui \
     Forms/saltpepperparameters.ui \
     Forms/thresholdwindow.ui \
     Forms/uniformnoiseparameters.ui \
@@ -107,6 +110,8 @@ RESOURCES += \
     Fonts.qrc \
     Fonts.qrc \
     Fonts.qrc \
+    Fonts.qrc \
+    Icons.qrc \
     Icons.qrc \
     Icons.qrc \
     Icons.qrc

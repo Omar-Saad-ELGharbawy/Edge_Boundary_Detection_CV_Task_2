@@ -17,7 +17,7 @@ Mat Hough_Line_Transform ( const Mat &image , int threshold )
     cvtColor(image, grayImage, COLOR_BGR2GRAY);
     // Perform edge detection
     Mat edges;
-    Canny(grayImage, edges, 100, 200);
+    Canny(grayImage, edges, 150, 200);
 
     int rows = grayImage.rows;
     int cols = grayImage.cols;
@@ -94,14 +94,14 @@ Mat Hough_Line_Transform ( const Mat &image , int threshold )
         line(result, pt1, pt2, Scalar(0, 0, 255), 1, LINE_AA);
     }
 
-    namedWindow("Edges", WINDOW_AUTOSIZE );
-    imshow("Edges", edges);
+//    namedWindow("Edges", WINDOW_AUTOSIZE );
+//    imshow("Edges", edges);
     return result;
 
 }
 
 /*************************************************************************************************
- ******************                        Hough Circle                                 ************
+ ******************                        Hough Circle                               ************
  *************************************************************************************************/
 
 

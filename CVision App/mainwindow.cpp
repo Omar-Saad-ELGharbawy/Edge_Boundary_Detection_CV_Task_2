@@ -11,6 +11,7 @@
 #include "Threshold/Thresholding.hpp"
 #include "Histogram/Histogram.hpp"
 #include "ActiveContour/activecontour.h"
+#include "HoughTransfrom/hough_transform.hpp"
 
 
 #include <iostream>
@@ -40,6 +41,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->EqualizeImage->setHidden(true);
     ui->GlobalThresholdSlider->setHidden(true);
+    ui->HoughTransfromSlider->setHidden(true);
 
 
 }
@@ -76,9 +78,9 @@ void MainWindow::on_BrowseButton_clicked()
     updateImage(inputMat, ui->EdgeDetection_inputImage, 1);
     updateImage(inputMat, ui->Threshold_InputImage, 1);
     updateImage(inputMat, ui->activeContourInputImage, 1);
+    updateImage(inputMat, ui->HoughTransfromInputImage, 1);
 
     updateImage(inputMat, ui->activeContourOutputImage, 1);
-
     updateImage(filterOutputMat, ui->filter_outputImage, 0);
 }
 
@@ -544,6 +546,56 @@ void MainWindow::on_contourRadiusSlider_valueChanged(int value)
 }
 
 
+
+// ----------------------------------------------------------- HOUGH TRANSFROM TAB ---------------------------------------------------
+// -----------------------------------------------------------------------------------------------------------------------------------
+
+void MainWindow::on_HoughLineButton_clicked()
+{
+    if(checkImage(inputImage)) return;
+
+    ui->HoughTransfromSlider->setHidden(false);
+
+    circleFlag = false;
+    cv::resize(inputMat, houghTransfromOutputMat, cv::Size(512,512), 0, 0);
+
+    houghTransfromOutputMat = Hough_Line_Transform(inputMat, houghThreshold);
+    updateImage(houghTransfromOutputMat, ui->HoughTransfromOutputImage, 1);
+}
+
+
+void MainWindow::on_HoughCircleButton_clicked()
+{
+    if(checkImage(inputImage)) return;
+
+    ui->HoughTransfromSlider->setHidden(true);
+
+    HoughCircleParameters houghCircleParameters;
+    houghCircleParameters.setModal(true);
+    houghCircleParameters.exec();
+
+    if(houghCircleParameters.flag) return;
+
+
+    cv::resize(inputMat, houghTransfromOutputMat, cv::Size(300,300), 0, 0);
+
+    houghTransfromOutputMat = Hough_Circle_Transform(houghTransfromOutputMat, houghCircleParameters.thresholdValue, houghCircleParameters.minimumRadius, houghCircleParameters.maximumRadius, houghCircleParameters.cannyMinimumThreshold, houghCircleParameters.cannyMaximumThreshold);
+    updateImage(houghTransfromOutputMat, ui->HoughTransfromOutputImage, 1);
+}
+
+
+void MainWindow::on_HoughTransfromSlider_valueChanged(int value)
+{
+    if(inputImage.isNull()) return;
+
+    houghThreshold = value;
+
+    cv::resize(inputMat, houghTransfromOutputMat, cv::Size(512,512), 0, 0);
+    houghTransfromOutputMat = Hough_Line_Transform(inputMat, houghThreshold);
+
+    updateImage(houghTransfromOutputMat, ui->HoughTransfromOutputImage, 1);
+}
+
 // ----------------------------------------------------------- HELPER FUNCTIONS ------------------------------------------------------
 // -----------------------------------------------------------------------------------------------------------------------------------
 
@@ -607,8 +659,13 @@ void MainWindow::on_pushButton_clicked()
     ui->EqualizeImage->setHidden(true);
     ui->GlobalThresholdSlider->setHidden(true);
 
+
     ui->activeContourInputImage->clear();
     ui->activeContourOutputImage->clear();
+
+    ui->HoughTransfromSlider->setHidden(true);
+    ui->HoughTransfromInputImage->clear();
+    ui->HoughTransfromOutputImage->clear();
 
 }
 
@@ -634,6 +691,12 @@ void MainWindow::updateActiveContour(Mat &inputMat, Mat &outputMat){
     active_Contour_Model(inputMat, outputMat, Point(xCoordinate, yCoordinate), radius, numIterations, alpha, beta, gamma);
     updateImage(outputMat, ui->activeContourOutputImage, 1);
 }
+
+
+
+
+
+
 
 
 

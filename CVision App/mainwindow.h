@@ -10,6 +10,8 @@
 #include <UI/cannyparameters.h>
 #include <UI/qcustomplot.h>
 #include <UI/clickablelabel.h>
+#include <Forms/houghcircleparameters.h>
+
 
 #include <iostream>
 #include <time.h>
@@ -97,6 +99,11 @@ public:
     int xCoordinate = 300;
     int yCoordinate = 300;
 
+// ------------- Hough Transfrom variables ----------------------------------
+    Mat houghTransfromOutputMat = Mat::zeros(1, 1, CV_64F);
+    int houghThreshold = 0;
+    bool circleFlag;
+
 
     Ui::MainWindow *ui;
 
@@ -154,6 +161,27 @@ private slots:
 
     void updateFrequencyResponse(Mat &inputMat, Mat &freqMat, QLabel* imageLabel, int sliderValue, int high_low_flag);
 
+// --------------------- Active Transfrom Tab ----------------
+
+    void on_alphaSlider_valueChanged(int value);
+
+    void on_betaSlider_valueChanged(int value);
+
+    void on_gammaSlider_valueChanged(int value);
+
+    void updateActiveContour(Mat &inputMat, Mat &outputMat);
+
+    void on_contourRadiusSlider_valueChanged(int value);
+
+
+// --------------------- Hough Transfrom Tab ----------------
+
+    void on_HoughLineButton_clicked();
+
+    void on_HoughCircleButton_clicked();
+
+    void on_HoughTransfromSlider_valueChanged(int value);
+
 // --------------------- Helper Functions ----------------
     bool checkImage(QImage &image);
 
@@ -175,15 +203,12 @@ private slots:
 
 
 
-    void on_alphaSlider_valueChanged(int value);
 
-    void on_betaSlider_valueChanged(int value);
 
-    void on_gammaSlider_valueChanged(int value);
 
-    void updateActiveContour(Mat &inputMat, Mat &outputMat);
 
-    void on_contourRadiusSlider_valueChanged(int value);
+
+
 
 private:
 
