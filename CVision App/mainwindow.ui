@@ -3035,23 +3035,6 @@ background-color:transparent;</string>
 border-radius: 5px;</string>
                    </property>
                    <layout class="QGridLayout" name="gridLayout_105">
-                    <item row="0" column="0">
-                     <widget class="QLabel" name="HoughCircleLabel">
-                      <property name="styleSheet">
-                       <string notr="true">font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
-font-size: 30px;
-color: black;
-background-color:transparent;
-border-color: transparent</string>
-                      </property>
-                      <property name="text">
-                       <string>Hough Circle</string>
-                      </property>
-                      <property name="alignment">
-                       <set>Qt::AlignCenter</set>
-                      </property>
-                     </widget>
-                    </item>
                     <item row="1" column="0">
                      <widget class="QPushButton" name="HoughCircleButton">
                       <property name="maximumSize">
@@ -3077,6 +3060,23 @@ QPushButton:hover:!pressed{
                       </property>
                       <property name="text">
                        <string>Apply</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="0">
+                     <widget class="QLabel" name="HoughCircleLabel">
+                      <property name="styleSheet">
+                       <string notr="true">font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+font-size: 30px;
+color: black;
+background-color:transparent;
+border-color: transparent</string>
+                      </property>
+                      <property name="text">
+                       <string>Hough Circle</string>
+                      </property>
+                      <property name="alignment">
+                       <set>Qt::AlignCenter</set>
                       </property>
                      </widget>
                     </item>
@@ -3107,7 +3107,7 @@ border-radius: 5px;</string>
                       <property name="maximumSize">
                        <size>
                         <width>16777215</width>
-                        <height>50</height>
+                        <height>16777215</height>
                        </size>
                       </property>
                       <property name="styleSheet">
