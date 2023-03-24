@@ -517,6 +517,7 @@ void MainWindow::on_alphaSlider_valueChanged(int value)
     if(inputImage.isNull()) return;
     updateActiveContour(inputMat, activeContourOutputMat);
 
+
 }
 
 
@@ -688,7 +689,24 @@ void MainWindow::updateFrequencyResponse(Mat &inputMat, Mat &freqMat, QLabel* im
 
 void MainWindow::updateActiveContour(Mat &inputMat, Mat &outputMat){
 
-    active_Contour_Model(inputMat, outputMat, Point(xCoordinate, yCoordinate), radius, numIterations, alpha, beta, gamma);
+    vector<Point> boundary = active_Contour_Model(inputMat, outputMat, Point(xCoordinate, yCoordinate), radius, numIterations, alpha, beta, gamma);
+    vector<std::vector<int>> image = createImageFromBoundary(boundary, boundary.size());
+
+    // Find the starting point
+    Point startPoint = findStartingPoint(image);
+
+    // Calculate the chain code
+    vector<ChainCode> contour = chainCode(image, startPoint);
+
+    // Normalize and print the chain code
+    std::vector<ChainCode> normalizedContour = normalizeContour(contour);
+    cout << "ChainCode = ";
+    for (ChainCode cc : normalizedContour)
+    {
+        cout << cc << " ";
+    }
+    cout << endl;
+
     updateImage(outputMat, ui->activeContourOutputImage, 1);
 }
 

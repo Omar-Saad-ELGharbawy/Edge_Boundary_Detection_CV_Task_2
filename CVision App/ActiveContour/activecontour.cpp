@@ -74,7 +74,7 @@ void snake(Mat img, vector<Point>& curve, int numIterations, double alpha, doubl
 vector<Point> initial_contour(Point center, int radius){
      vector<Point> curve;
 
-    for (int i = 0; i <= 360; i += 10) {
+    for (int i = 0; i <= 360; i += 1) {
         double angle = i * CV_PI / 180;
         int x = center.x + radius * cos(angle);
         int y = center.y + radius * sin(angle);
@@ -157,30 +157,9 @@ vector<Point> active_Contour_Model(Mat img, Mat &outputImg, Point center, int ra
 }
 
 
-// This defines a simple 2D point structure with x and y integer coordinates.
-struct Point
-{
-    int x;
-    int y;
 
-    bool operator!=(const Point &other) const
-    {
-        return x != other.x || y != other.y;
-    }
-};
 
-// This defines an enum of the possible directions (or chain codes) that can be used to traverse a contour.
-enum ChainCode
-{
-    East = 0,
-    NorthEast = 1,
-    North = 2,
-    NorthWest = 3,
-    West = 4,
-    SouthWest = 5,
-    South = 6,
-    SouthEast = 7
-};
+
 
 /*
   1- This is a helper function that takes a point p and a direction direction
@@ -314,12 +293,12 @@ std::vector<ChainCode> normalizeContour(const std::vector<ChainCode> &contour)
 4- sets the pixel values at the boundary points to 1.
 
 */
-std::vector<std::vector<int>> createImageFromBoundary(const std::vector<Point> &boundary, int width, int height)
+std::vector<std::vector<int>> createImageFromBoundary(const std::vector<Point> &boundary, int size)
 {
-    std::vector<std::vector<int>> image(height, std::vector<int>(width, 0));
+    std::vector<std::vector<int>> image(size, std::vector<int>(size, 0));
     for (const Point &p : boundary)
     {
-        if (p.x >= 0 && p.x < width && p.y >= 0 && p.y < height)
+        if (p.x >= 0 && p.x < size && p.y >= 0 && p.y < size)
         {
             image[p.y][p.x] = 1;
         }
